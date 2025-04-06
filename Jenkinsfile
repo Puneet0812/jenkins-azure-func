@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        AZURE_CLIENT_ID = credentials('AZURE_CLIENT_CREDENTIALS_USR')
-        AZURE_CLIENT_SECRET = credentials('AZURE_CLIENT_CREDENTIALS_PSW')
+        AZURE_SP_CREDENTIALS = credentials('AZURE_CLIENT_CREDENTIALS')  // Use this single credential
+        AZURE_CLIENT_ID = "${AZURE_SP_CREDENTIALS_USR}"
+        AZURE_CLIENT_SECRET = "${AZURE_SP_CREDENTIALS_PSW}"
         AZURE_TENANT_ID = credentials('AZURE_TENANT_ID')
         RESOURCE_GROUP = credentials('RESOURCE_GROUP')
         FUNCTION_APP_NAME = credentials('FUNCTION_APP_NAME')
