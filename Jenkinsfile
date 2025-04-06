@@ -3,8 +3,6 @@ pipeline {
 
     environment {
         AZURE_SP_CREDENTIALS = credentials('AZURE_CLIENT_CREDENTIALS')
-        AZURE_CLIENT_ID = "${AZURE_SP_CREDENTIALS_USR}"
-        AZURE_CLIENT_SECRET = "${AZURE_SP_CREDENTIALS_PSW}"
         AZURE_TENANT_ID = credentials('AZURE_TENANT_ID')
         RESOURCE_GROUP = credentials('RESOURCE_GROUP')
         FUNCTION_APP_NAME = credentials('FUNCTION_APP_NAME')
@@ -28,11 +26,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying to Azure...'
-                bat '''
-                    az login --service-principal -u %AZURE_CLIENT_ID% -p %AZURE_CLIENT_SECRET% --tenant %AZURE_TENANT_ID%
+                bat """
+                    az login --service-principal -u %AZURE_SP_CREDENTIALS_USR% -p %AZURE_SP_CREDENTIALS_PSW% --tenant %AZURE_TENANT_ID%
                     powershell Compress-Archive -Path * -DestinationPath function.zip
                     az functionapp deployment source config-zip --resource-group %RESOURCE_GROUP% --name %FUNCTION_APP_NAME% --src function.zip
-                '''
+                """
             }
         }
     }
